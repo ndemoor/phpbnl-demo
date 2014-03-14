@@ -1,0 +1,59 @@
+vagrant up
+vagrant ssh
+
+sudo docker version
+
+sudo docker images
+
+cd /vagrant/memcached
+sudo docker build -t phpbnl/memcached . # explain build steps
+
+sudo docker images
+
+# show memcached not installed on host
+
+sudo docker run ubuntu echo Hello World
+
+sudo docker run ubuntu touch /tmp/test
+dufo docker ps -a
+sudo docker diff [CONTAINER_ID]
+
+
+sudo docker run -p 11211:11211 -d phpbnl/memcached
+
+sudo docker ps
+
+telnet localhost 11211
+stats
+quit
+
+sudo docker kill CONTAINER_ID
+
+sudo docker ps
+sudo docker ps -a
+
+
+cd /vagrant/nginx-php
+sudo docker build -t phpbnl/nginx-php . # this will be our parent
+sudo docker run phpbnl/nginx-php php -v
+
+
+######
+
+
+sudo docker run -d -name memcache phpbnl/memcached
+
+# No port publish!
+
+sudo docker run \
+  -p 3000:3000 \
+  -e NODE_ENV=dev \
+  -link memcache:mc \
+  -v /tmp/log/app:/var/log/app:rw \
+  -t -i \
+  phpbnl/nginx-php bash
+
+env # show mc params
+touch /var/log/app/bashtest
+exit
+ls /tmp/log/app/
